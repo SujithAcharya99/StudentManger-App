@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt =require('jsonwebtoken');
-
-// const studentSchema = new mongoose.Schema({
-// const Student = mongoose.model('Student',{
 const studentSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -57,25 +54,16 @@ const studentSchema = new mongoose.Schema({
     }]
 });
 
-// const Student = mongoose.model('Student', adminSchema);
-
 studentSchema.methods.generateAuToken = async function () {
     const student = this;
-    // console.log('inside token')
-    // console.log(student)
-    // const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
     const token = jwt.sign({ _id: student._id.toString() }, 'thisismynewcourse')
-    // console.log(token)
     student.tokens = student.tokens.concat({ token });
     await student.save();
-
     return token;
 }
 
 studentSchema.statics.findByCredentials = async (email, password) => {
     const student = await Student.findOne({ email });
-    // console.log(student)
-    // console.log('inside module'
     if (!student) {
         throw new Error('Unable to Login');
     }
@@ -86,12 +74,8 @@ studentSchema.statics.findByCredentials = async (email, password) => {
     return student;
 };
 
-
-// hasihing before saving
 studentSchema.pre('save',async function (next) {
     const student = this;
-
-    //console.log('just before save');
     if (student.isModified('password')) {
         student.password = await bcrypt.hash(student.password, 8);
     }
