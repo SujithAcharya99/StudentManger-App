@@ -3,8 +3,6 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt =require('jsonwebtoken');
 
-// const studentSchema = new mongoose.Schema({
-// const User = mongoose.model('User',{
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -57,14 +55,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuToken = async function () {
     const user = this;
-
-    // const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
-
     const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
-    // console.log(token)
     user.tokens = user.tokens.concat({ token });
     await user.save();
-
     return token;
 }
 
@@ -77,28 +70,18 @@ userSchema.statics.findByCredentials = async (email, password) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
         throw new Error('Unable is login');
-        
     }
     return user;
 };
 
-
-// hasihing before saving
 userSchema.pre('save',async function (next) {
     const user = this;
-
-    //console.log('just before save');
     if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8);
     }
     next();
 });
 
-
-// const token= req.headers.cookie.replace('jwt=','')
-//         const decoded=jwt.verify(token,'thisisanapp')
-
 const User = mongoose.model('User', userSchema);
-
 
 module.exports = User;
