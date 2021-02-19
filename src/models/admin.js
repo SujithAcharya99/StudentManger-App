@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const validator = require('validator')
-
-// const adminSchema = new mongoose.Schema({
 const Admin = mongoose.model('Admin', {
     name: {
         type: String,
@@ -31,7 +29,4 @@ const Admin = mongoose.model('Admin', {
         }
     }
 });
-
-// const Admin = mongoose.model('Admin', adminSchema);
-
 module.exports = Admin;
