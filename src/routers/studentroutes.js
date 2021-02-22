@@ -693,7 +693,7 @@ router.get('/teacher/delete/:id', async (req, res) => {
     await teacher.remove();
   } catch (e) {
     res.status(400).send();
-  
+  }
   res.redirect('/admin/dashboard');
 })
 
